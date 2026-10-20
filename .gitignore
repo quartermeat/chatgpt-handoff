@@ -1,0 +1,4 @@
+chunk-*.yaml
+*.zip
+shared-memory/
+/chatgpt-handoff
