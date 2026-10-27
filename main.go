@@ -26,6 +26,29 @@ type bundle struct {
 }
 
 func main() {
+	if len(os.Args) > 1 {
+		var err error
+		switch os.Args[1] {
+		case "prompt":
+			err = promptCommand(os.Args[2:])
+		case "import":
+			err = importCommand(os.Args[2:])
+		case "status":
+			err = statusCommand(os.Args[2:])
+		default:
+			err = nil
+		}
+		if os.Args[1] == "prompt" || os.Args[1] == "import" || os.Args[1] == "status" {
+			if errors.Is(err, flag.ErrHelp) {
+				return
+			}
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "handoff:", err)
+				os.Exit(1)
+			}
+			return
+		}
+	}
 	input := flag.String("input", "-", "YAML bundle path, or - for standard input")
 	output := flag.String("out", "shared-memory", "directory for created files")
 	flag.Parse()
